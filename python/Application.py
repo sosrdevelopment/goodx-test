@@ -13,16 +13,16 @@ if __name__ == '__main__':
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/json')],
         },
-        '/static': {
+        '/Static': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir' : os.path.abspath(
-                os.path.join(os.path.dirname(__file__), 'static')
+                os.path.join(os.path.dirname(__file__), 'Static')
             )
         }
     }
 
     webapp = ApplicationController.Application()
-    webapp.api = ApplicationController.EntityService()
+    #webapp.api = ApplicationController.EntityService()
 
     cherrypy.quickstart(
         webapp,
