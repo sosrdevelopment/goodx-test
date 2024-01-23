@@ -1,7 +1,7 @@
 import cherrypy
 
 @cherrypy.expose
-class EntityService(object):
+class EntitiesWebService(object):
     def POST(self):
         return "EntityService.POST()"
     
