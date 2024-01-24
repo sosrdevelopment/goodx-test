@@ -8,11 +8,16 @@ import Services.BookingsWebService as Bookings
 import Services.BookingTypesWebService as BookingTypes
 import Services.DebtorsWebService as Debtors
 import Services.DiariesWebService as Diaries
-import Services.EntitiesWebService as Entities
+import Services.EntitiesWebService as EntitiesWebService
 import Services.PatientsWebService as Patients
+import Services.SessionsWebService as Sessions
 
 #   --- MAIN
 if __name__ == '__main__':
+    #  --- Setup : REST API
+    #   ToDo : bookingStatuses -> booking-statuses
+    #   ToDo : bookingTypes -> booking-types
+    #   ToDo : bundle settings under 'api'
     conf = {
         '/bookingStatuses': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
@@ -48,20 +53,31 @@ if __name__ == '__main__':
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/json')],
+        },
+        '/sessions': {
+            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+            'tools.response_headers.on': True,
+            'tools.response_headers.headers': [('Content-Type', 'text/json')],
         }
     }
     
-    api = App.ApplicationWebService()
+    api = App.RestAPI()
     api.bookingStatuses = BookingStatuses.BookingStatusesWebServices()
     api.bookings = Bookings.BookingsWebService()
     api.bookingTypes = BookingTypes.BookingTypesWebService()
     api.debtors = Debtors.DebtorsWebService()
     api.diaries = Diaries.DiariesWebService()
-    api.entities = Entities.EntitiesWebService()
+    api.entities = EntitiesWebService.EntitiesWebService()
     api.patients = Patients.PatientsWebService()
+    api.sessions = Sessions.SessionsWebService()
     
-    cherrypy.tree.mount(api, '/rest-api', conf)
-    
+    cherrypy.tree.mount(
+        api,
+        '/api',
+        conf
+    )
+
+    #  --- Setup : Server
     cherrypy.config.update({
         'server.socket_host': '127.0.0.1',
         'server.socket_port': 8080

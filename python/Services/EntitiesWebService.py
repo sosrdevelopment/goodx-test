@@ -22,4 +22,3 @@ class EntitiesWebService(object):
             return "EntityService.DELETE()"
         
         return "EntityService.DELETE(%(entityId)s)" % {"entityId": entityId}
-    
