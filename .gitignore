@@ -4,6 +4,7 @@ node_modules/
 .vscode/
 *.dll
 *.pdb
+*.conf
 bin/
 obj/
 *.py[cod]

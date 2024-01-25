@@ -14,53 +14,6 @@ import Services.SessionsWebService as Sessions
 
 #   --- MAIN
 if __name__ == '__main__':
-    #  --- Setup : REST API
-    #   ToDo : bookingStatuses -> booking-statuses
-    #   ToDo : bookingTypes -> booking-types
-    #   ToDo : bundle settings under 'api'
-    conf = {
-        '/bookingStatuses': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/bookings': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/bookingTypes': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/debtors': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/diaries': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/entities': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/patients': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        },
-        '/sessions': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/json')],
-        }
-    }
-    
     api = App.RestAPI()
     api.bookingStatuses = BookingStatuses.BookingStatusesWebServices()
     api.bookings = Bookings.BookingsWebService()
@@ -71,10 +24,14 @@ if __name__ == '__main__':
     api.patients = Patients.PatientsWebService()
     api.sessions = Sessions.SessionsWebService()
     
+    #  --- Setup : REST API
+    #   ToDo : bookingStatuses -> booking-statuses
+    #   ToDo : bookingTypes -> booking-types
+    #   ToDo : bundle settings under 'api'
     cherrypy.tree.mount(
         api,
         '/api',
-        conf
+        'development.conf'
     )
 
     #  --- Setup : Server

@@ -9,5 +9,10 @@
     - [Done] &emsp;&emsp; Setup Tailwinds
     - [InProgress] Implement services
     - Implement unit testing
+    - Implement middleware
+      - cleaner response
+      - exception handling
+      - cleaner post requests
+      - cleaner json config per web-=service
     - Implement front-end via React
     
