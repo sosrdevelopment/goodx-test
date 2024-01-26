@@ -1,5 +1,6 @@
 import cherrypy
 import requests
+import urllib.parse
 
 @cherrypy.expose
 @cherrypy.tools.json_in()
@@ -10,6 +11,7 @@ class DiariesWebService(object):
         return "DiaryService.POST()"
     
     def GET(self, diaryId = None):
+        #   guard : authentication
         if (not cherrypy.session.get("token")):
             cherrypy.response.status = 401
             return {
@@ -18,12 +20,27 @@ class DiariesWebService(object):
                 "message": "Not authenticated."
             }
 
-        params = {}
+        params = {
+            "fields": "[\"uuid\",\"uid\",\"entity_uid\",\"treating_doctor_uid\",\"service_center_uid\",\"booking_type_uid\",\"name\",\"disabled\"]"
+            #   the urlencoded  version gets extra url encoded :D
+            # "fields": urllib.parse.urlencode(
+            #     {
+            #         "a": [
+            #             "uuid",
+            #             "uid",
+            #             "entity_uid",
+            #             "treating_doctor_uid",
+            #             "service_center_uid",
+            #             "booking_type_uid",
+            #             "name",
+            #             "disabled"
+            #         ]
+            #     }
+            # ).split('=')[1]
+        }
         headers = {
-            "Cookie": {
-                "session_id": "%(token)s" % {
-                    "token": cherrypy.session.get("token")
-                }
+            "Cookie": "session_id=%(token)s" % {
+                "token": cherrypy.session.get("token")
             }
         }
 
@@ -44,8 +61,19 @@ class DiariesWebService(object):
             params = params,
             headers = headers
         )
+        cherrypy.log.error(diaryRequest.request.url)
+        #   guard : status code
+        if (diaryRequest.status_code != 200):
+            cherrypy.response.status = 400
+            return {
+                "status": "BAD_REQUEST",
+                "status_code": 400,
+                "message": "Could not retrieve diary.",
+                "response": diaryRequest.json()
+            }
 
         diaryResponse = diaryRequest.json()
+        #   guard : status
         if (diaryResponse["status"] != "OK"):
             cherrypy.response.status = 400
             return {

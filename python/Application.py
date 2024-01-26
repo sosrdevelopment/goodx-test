@@ -8,7 +8,6 @@ import Services.BookingsWebService as Bookings
 import Services.BookingTypesWebService as BookingTypes
 import Services.DebtorsWebService as Debtors
 import Services.DiariesWebService as Diaries
-import Services.EntitiesWebService as EntitiesWebService
 import Services.PatientsWebService as Patients
 import Services.SessionsWebService as Sessions
 
@@ -20,7 +19,6 @@ if __name__ == '__main__':
     api.bookingTypes = BookingTypes.BookingTypesWebService()
     api.debtors = Debtors.DebtorsWebService()
     api.diaries = Diaries.DiariesWebService()
-    api.entities = EntitiesWebService.EntitiesWebService()
     api.patients = Patients.PatientsWebService()
     api.sessions = Sessions.SessionsWebService()
     
