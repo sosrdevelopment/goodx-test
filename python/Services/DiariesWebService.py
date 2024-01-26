@@ -1,15 +1,12 @@
 import cherrypy
 import requests
-import urllib.parse
+# import urllib.parse
 
 @cherrypy.expose
 @cherrypy.tools.json_in()
 @cherrypy.tools.json_out()
 @cherrypy.tools.accept(media="application/json")
-class DiariesWebService(object):
-    def POST(self):
-        return "DiaryService.POST()"
-    
+class DiariesWebService(object):    
     def GET(self, diaryId = None):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
@@ -61,7 +58,7 @@ class DiariesWebService(object):
             params = params,
             headers = headers
         )
-        cherrypy.log.error(diaryRequest.request.url)
+        
         #   guard : status code
         if (diaryRequest.status_code != 200):
             cherrypy.response.status = 400
@@ -84,15 +81,3 @@ class DiariesWebService(object):
             }
         
         return diaryResponse
-    
-    def PUT(self, diaryId = None):
-        if (diaryId == None):
-            return "DiaryService.PUT()"
-        
-        return "DiaryService.PUT(%(diaryId)s)" % {"diaryId": diaryId}
-    
-    def DELETE(self, diaryId = None):
-        if (diaryId == None):
-            return "DiaryService.DELETE()"
-        
-        return "DiaryService.DELETE(%(diaryId)s)" % {"diaryId": diaryId}
