@@ -7,7 +7,7 @@
     - [Done] &emsp;&emsp; Setup environment
     - [Done] &emsp;&emsp; Run Test App
     - [Done] &emsp;&emsp; Setup Tailwinds
-    - [InProgress] Implement services
+    - [InProgress] Implement services w/ validations
     - Implement unit testing
     - Implement middleware
       - cleaner response

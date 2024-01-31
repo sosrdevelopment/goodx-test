@@ -17,14 +17,53 @@ class BookingsWebService(object):
             }
         
         #   validation
+        req = cherrypy.request.json
+
+        entity_uid = cherrypy.session.get("entity_uid")
+        if (entity_uid == None):
+            cherrypy.response.status = 400
+            return {
+                "status": "BAD_REQUEST",
+                "status_code": 400,
+                "message": "Entity not set in session."
+            }
+        
+        diary_uid = cherrypy.session.get("diary_uid")
+        if (diary_uid == None):
+            cherrypy.response.status = 400
+            return {
+                "status": "BAD_REQUEST",
+                "status_code": 400,
+                "message": "Diary not set in session."
+            }
+        
+        if (not "booking_status_uid" in req
+            or req["booking_status_uid"] == None):
+            cherrypy.response.status = 400
+            return {
+                "status": "BAD_REQUEST",
+                "status_code": 400,
+                "message": "Booking status is required."
+            }
+        if (not "patient_uid" in req
+            or req["patient_uid"] == None):
+            cherrypy.response.status = 400
+            return {
+                "status": "BAD_REQUEST",
+                "status_code": 400,
+                "message": "Patient is required."
+            }
+        
+        if (req["duration"] == None):
+            req["duration"] = 15
 
         #   request
         data = {
             "model": {
-                "entity_uid": req["entity_uid"],
-                "diary_uid": req["diary_uid"],
+                "entity_uid": entity_uid,
+                "diary_uid": diary_uid,
                 "booking_type_uid": req["booking_type_uid"],
-                "booking_status_uid": req["booking_status_uid"],
+                "booking_status_uid": 21,
                 "start_time": req["start_time"],
                 "duration": req["duration"],
                 "patient_uid": req["patient_uid"],

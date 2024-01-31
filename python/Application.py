@@ -10,6 +10,7 @@ import Services.DebtorsWebService as Debtors
 import Services.DiariesWebService as Diaries
 import Services.PatientsWebService as Patients
 import Services.SessionsWebService as Sessions
+import Services.UserSessionWebService as UserSession
 
 #   --- MAIN
 if __name__ == '__main__':
@@ -21,6 +22,7 @@ if __name__ == '__main__':
     api.diaries = Diaries.DiariesWebService()
     api.patients = Patients.PatientsWebService()
     api.sessions = Sessions.SessionsWebService()
+    api.userSession = UserSession.UserSessionWebService()
     
     #  --- Setup : REST API
     #   ToDo : bookingStatuses -> booking-statuses
