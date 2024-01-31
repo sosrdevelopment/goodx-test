@@ -7,13 +7,13 @@
     - [Done] &emsp;&emsp; Setup environment
     - [Done] &emsp;&emsp; Run Test App
     - [Done] &emsp;&emsp; Setup Tailwinds
-    - [InProgress] Implement services w/ validations
-    - Implement unit testing
+    - [Done] &emsp;&emsp; Implement services w/ validations
+    - [InProgress] -- Implement unit testing
     - Implement middleware
       - cleaner response
       - exception handling
       - cleaner post requests
-      - cleaner json config per web-=service
+      - [Done] cleaner json config per web-=service
     - Implement front-end via React
     - Expand on services
       - fix URL encoding (its url encoding the url encoded value >.<)

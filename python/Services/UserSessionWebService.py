@@ -1,8 +1,5 @@
 import cherrypy
 
-@cherrypy.tools.json_in()
-@cherrypy.tools.json_out()
-@cherrypy.tools.accept(media="application/json")
 class UserSessionWebService(object):
     @cherrypy.expose
     def setEntity(self, entity_uid = None):

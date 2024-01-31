@@ -2,9 +2,6 @@ import cherrypy
 import requests
 
 @cherrypy.expose
-@cherrypy.tools.json_in()
-@cherrypy.tools.json_out()
-@cherrypy.tools.accept(media="application/json")
 class BookingTypesWebService(object):
     def GET(self, bookingTypeId = None):
         #   guard : authentication

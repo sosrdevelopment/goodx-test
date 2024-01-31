@@ -3,9 +3,6 @@ import requests
 # import urllib.parse
 
 @cherrypy.expose
-@cherrypy.tools.json_in()
-@cherrypy.tools.json_out()
-@cherrypy.tools.accept(media="application/json")
 class DiariesWebService(object):    
     def GET(self, diaryId = None):
         #   guard : authentication
