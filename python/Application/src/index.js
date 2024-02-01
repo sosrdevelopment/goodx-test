@@ -1,5 +1,5 @@
 //  --- Imports : React and Routing
-import React, { useEffect } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 //  --- Imports : Views
@@ -11,55 +11,41 @@ import ProtectedRoute from './Context/Authentication/ProtectedRoute'
 //  --- Imports : Containers
 import Layout from './Containers/Layout/Layout'
 //  --- Imports : Libraries
-import toastr from 'toastr'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //  --- Imports : Assets
 import './Assets/css/index.css'
 import './Assets/css/scrollbar.css'
+import AuthProvider from './Context/Authentication/AuthProvider'
 
 //  --- Main Application
 function App() {
-	//	setup
-	useEffect(() => {
-		toastr.options = {
-			closeButton: true,
-			newestOnTop: true,
-			progressBar: true,
-			positionClass: 'toast-top-center',
-			showDuration: '300',
-			hideDuration: '300',
-			timeOut: '2000',
-			extendedTimeOut: '750',
-			showEasing: 'swing',
-			hideEasing: 'swing',
-			showMethod: 'fadeIn',
-			hideMethod: 'fadeOut',
-		}
-	}, [])
-
-	// response
 	return (
 		<BrowserRouter>
-			<Layout>
-				<Routes>
-					<Route index path='/' element={<UsersLogInView />} />
-					<Route
-						path='/bookings'
-						element={
-							<ProtectedRoute>
-								<BookingsIndexView />
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path='/diaries'
-						element={
-							<ProtectedRoute>
-								<DiariesIndexView />
-							</ProtectedRoute>
-						}
-					/>
-				</Routes>
-			</Layout>
+			<AuthProvider>
+				<Layout>
+					<ToastContainer />
+					<Routes>
+						<Route index path='/' element={<UsersLogInView />} />
+						<Route
+							path='/bookings'
+							element={
+								<ProtectedRoute>
+									<BookingsIndexView />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='/diaries'
+							element={
+								<ProtectedRoute>
+									<DiariesIndexView />
+								</ProtectedRoute>
+							}
+						/>
+					</Routes>
+				</Layout>
+			</AuthProvider>
 		</BrowserRouter>
 	)
 }

@@ -1,19 +1,29 @@
-import React, { useCallback, useState } from 'react'
-import { AuthContext } from '../'
-import toastr from 'toastr'
-import ApiHelper from '../../helpers/ApiHelper'
+import React, { useCallback, useEffect, useState } from 'react'
+import ApiHelper from '../../Helpers/Apis/ApiHelper'
+import AuthContext from './AuthContext'
 
 const AuthProvider = ({ children }) => {
 	//  --- variables ---
-	let sessionUser = JSON.parse(localStorage.getItem('sessionUser'))
-	let [user, setUser] = useState(sessionUser ? sessionUser : null)
-	let [isAuthenticated, setIsAuthenticated] = useState(sessionUser ? true : false)
+	let [user, setUser] = useState(null)
+	let [isAuthenticated, setIsAuthenticated] = useState(false)
+
+	//	setup
+	useEffect(() => {
+		var sessionUser = localStorage.getItem('sessionUser')
+		if (sessionUser) {
+			setUser(sessionUser)
+			setIsAuthenticated(true)
+		} else {
+			setUser(null)
+			setIsAuthenticated(false)
+		}
+	}, [setUser, setIsAuthenticated])
 
 	//  --- functionality ---
 	const signIn = useCallback(
 		async (username, password, successCallback, errorCallback) => {
 			await ApiHelper.loginUser({
-				email: username,
+				username: username,
 				password: password,
 			})
 				.then((response) => {
@@ -23,7 +33,6 @@ const AuthProvider = ({ children }) => {
 					if (successCallback) successCallback()
 				})
 				.catch(() => {
-					toastr.error('Could not authenticate.')
 					if (errorCallback) errorCallback()
 				})
 		},

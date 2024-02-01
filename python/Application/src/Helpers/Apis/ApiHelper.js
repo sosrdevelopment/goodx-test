@@ -1,4 +1,4 @@
-const { destroy, get, post, put } = require('./AjaxHelper')
+const { destroy, get, post, put, default: customFetch } = require('./AjaxHelper')
 
 module.exports = {
 	//  users
@@ -6,6 +6,13 @@ module.exports = {
 		return get('/api/users/alive').then((r) => r.data)
 	},
 	loginUser: (req) => {
-		return post('/api/users/login', null, req).then((r) => r.data)
+		return customFetch(
+			'/api/sessions',
+			'post',
+			{ 'Content-Type': 'application/json' },
+			req
+		).then((r) => {
+			return r.data
+		})
 	},
 }

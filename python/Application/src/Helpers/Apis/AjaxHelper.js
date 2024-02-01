@@ -1,15 +1,13 @@
-//  --- imports ---
-const axios = require('axios')
+import axios from 'axios'
 
 //  --- functionality ---
-const customFetch = (url, method, headers, body, checks, parse) => {
-	return axios
-		.request({
-			url: url,
-			method: method,
-			data: body,
-			headers: headers,
-		})
+function customFetch(url, method, headers, body, checks, parse) {
+	return axios({
+		url: 'http://127.0.0.1:8080' + url,
+		method: method,
+		data: body,
+		headers: headers,
+	})
 		.then((response) => {
 			if (checks && checks.ok && response.status >= 400) throw response
 			if (parse && parse.json) return response.data
@@ -19,23 +17,8 @@ const customFetch = (url, method, headers, body, checks, parse) => {
 		.catch((error) => {
 			if (error.response.status === 401) {
 				window.localStorage.removeItem('sessionUser')
-				return window.location.reload()
 			}
 		})
 }
 
-module.exports = {
-	fetch: customFetch,
-	post: (url, headers, body) => {
-		return customFetch(url, 'post', headers, body)
-	},
-	get: (url, headers) => {
-		return customFetch(url, 'get', headers, null, { ok: true })
-	},
-	put: (url, headers, body) => {
-		return customFetch(url, 'put', headers, body)
-	},
-	destroy: (url, headers) => {
-		return customFetch(url, 'delete', headers)
-	},
-}
+export default customFetch
