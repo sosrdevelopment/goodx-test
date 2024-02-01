@@ -1,6 +1,5 @@
 import cherrypy
 from cherrypy.test import helper
-from cherrypy.test import test_json
 
 #   --- Services
 import Services.ApplicationWebService as App
@@ -22,16 +21,38 @@ class SessionsTest(helper.CPWebCase):
         self.assertStatus("401 Unauthorized")
 
     def test_authenticate_with_bad_credentials(self):
-        self.getPage("/api/sessions", method="POST", body='{"username":"bad","password":"bad"}')
-        self.assertStatus("401 Unauthorized")
-
-    def test_authenticate_with_good_credentials(self):
+        body = '{"username":"bad","password":"bad"}'
         self.getPage(
             "/api/sessions",
             method="POST",
-            body='{"username":"applicant_004","password":"app004"}'
+            headers=[
+                ("Content-Type", "application/json"),
+                ("Content-Length", str(len(body)))
+            ],
+            body=body
+        )
+        self.assertStatus("401 Unauthorized")
+
+    def test_authenticate_with_good_credentials(self):
+        body = '{"username":"applicant_004","password":"app004"}'
+        self.getPage(
+            "/api/sessions",
+            method="POST",
+            headers=[
+                ("Content-Type", "application/json"),
+                ("Content-Length", str(len(body)))
+            ],
+            body=body
         )
         self.assertStatus("200 OK")
 
-        self.getPage("/api/sessions")
+        cookie = self.assertHeader("Set-Cookie")
+        self.cookies = cookie.split(";")[0]
+
+        self.getPage(
+            "/api/sessions",
+            headers=[
+                ("Cookie", self.cookies)
+            ]
+        )
         self.assertStatus("200 OK")

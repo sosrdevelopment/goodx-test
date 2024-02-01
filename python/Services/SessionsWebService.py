@@ -42,20 +42,20 @@ class SessionsWebService(object):
         )
 
         if (authRequest.status_code != 200):
-            cherrypy.response.status = 400
+            cherrypy.response.status = 401
             return {
-                "status": "BAD_REQUEST",
-                "status_code": 400,
-                "message": "Could not authenticate."
+                "status": "UNAUTHORIZED",
+                "status_code": 401,
+                "message": "Unauthorized"
             }
         
         authResponse = authRequest.json()
         if (authResponse["status"] != "OK"):
-            cherrypy.response.status = 400
+            cherrypy.response.status = 401
             return {
-                "status": "BAD_REQUEST",
-                "status_code": 400,
-                "message": "Could not authenticate."
+                "status": "UNAUTHORIZED",
+                "status_code": 401,
+                "message": "Unauthorized"
             }
         
         cherrypy.session["token"] = authResponse["data"]["uid"]

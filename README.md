@@ -13,7 +13,8 @@
       - cleaner response
       - exception handling
       - cleaner post requests
-      - [Done] cleaner json config per web-=service
+      - [Done] -- authentication
+      - [Done] -- cleaner json config per web-=service
     - Implement front-end via React
     - Expand on services
       - fix URL encoding (its url encoding the url encoded value >.<)

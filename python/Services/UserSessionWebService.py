@@ -2,7 +2,8 @@ import cherrypy
 
 class UserSessionWebService(object):
     @cherrypy.expose
-    def setEntity(self, entity_uid = None):
+    @cherrypy.tools.allow(methods=["POST"])
+    def setEntity(self):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
             cherrypy.response.status = 401
@@ -12,7 +13,7 @@ class UserSessionWebService(object):
                 "message": "Not authenticated."
             }
         
-        cherrypy.session["entity_uid"] = entity_uid
+        cherrypy.session["entity_uid"] = cherrypy.request.json["entity_uid"]
         cherrypy.response.status = 200
         return {
             "entity_uid": cherrypy.session.get("entity_uid")
@@ -35,7 +36,8 @@ class UserSessionWebService(object):
         }
     
     @cherrypy.expose
-    def setDiary(self, diary_uid = None):
+    @cherrypy.tools.allow(methods=["POST"])
+    def setDiary(self):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
             cherrypy.response.status = 401
@@ -45,7 +47,7 @@ class UserSessionWebService(object):
                 "message": "Not authenticated."
             }
         
-        cherrypy.session["diary_uid"] = diary_uid
+        cherrypy.session["diary_uid"] = cherrypy.request.json["diary_uid"]
         cherrypy.response.status = 200
         return {
             "diary_uid": cherrypy.session.get("diary_uid")

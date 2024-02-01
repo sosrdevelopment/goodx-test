@@ -1,6 +1,9 @@
 import cherrypy
 import os
 
+#  --- Middleware
+from Infrastructure.Authenticate import authenticate
+
 #   --- Services
 import Services.ApplicationWebService as App
 import Services.BookingStatusesWebServices as BookingStatuses
@@ -23,6 +26,9 @@ if __name__ == '__main__':
     api.patients = Patients.PatientsWebService()
     api.sessions = Sessions.SessionsWebService()
     api.userSession = UserSession.UserSessionWebService()
+
+    #   --- Setup : Middleware
+    cherrypy.tools.authenticate = cherrypy.Tool('before_handler', authenticate)
     
     #  --- Setup : REST API
     #   ToDo : bookingStatuses -> booking-statuses
