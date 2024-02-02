@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
-import { useCallback } from 'react'
 import ApiHelper from '../../Helpers/Apis/ApiHelper'
 import ResponsiveLoadingCard from '../../Components/Cards/ResponsiveLoadingCard'
 import Card from '../../Components/Cards/Card'
@@ -11,14 +10,6 @@ function DiariesIndexView() {
 
 	//	Queries
 	const { data, isLoading, error } = useQuery('diaries', () => ApiHelper.indexDiaries())
-
-	//	Functionality
-	const navigateToDiary = useCallback(
-		(diary_uid) => {
-			alert(diary_uid)
-		},
-		[navigate]
-	)
 
 	//	Response
 	if (error) return null
@@ -37,9 +28,8 @@ function DiariesIndexView() {
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 w-full gap-4'>
 				{data.data.map((diary) => {
 					return (
-						<div onClick={() => navigate('/diaries/' + diary.uid)}>
+						<div key={diary.uid} onClick={() => navigate('/diaries/' + diary.uid)}>
 							<Card
-								key={diary.uid}
 								outerClass='mb-auto cursor-pointer rounded-lg shadow-lg border hover:border-teal-300'
 								innerClass='space-y-1'
 							>

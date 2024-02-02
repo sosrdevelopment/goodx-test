@@ -21,8 +21,39 @@ module.exports = {
 		})
 	},
 	//	bookings
+	createBooking: (booking) => {
+		return customFetch('/api/bookings', 'post', {
+			'Content-Type': 'application/json',
+		}, booking).then((r) => {
+			return r.data
+		})
+	},
 	indexBookings: (diary_uid) => {
 		return customFetch('/api/bookings?diary_uid=' + diary_uid, 'get', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
+			return r.data
+		})
+	},
+	//	booking-types
+	indexBookingTypes: () => {
+		return customFetch('/api/bookingTypes', 'get', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
+			return r.data
+		})
+	},
+	//	booking-statuses
+	indexBookingStatuses: () => {
+		return customFetch('/api/bookingStatuses', 'get', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
+			return r.data
+		})
+	},
+	//	patients
+	indexPatients: () => {
+		return customFetch('/api/patients', 'get', {
 			'Content-Type': 'application/json',
 		}).then((r) => {
 			return r.data

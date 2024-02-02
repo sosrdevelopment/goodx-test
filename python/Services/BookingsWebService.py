@@ -6,6 +6,10 @@ import requests
 @cherrypy.tools.json_out()
 @cherrypy.tools.accept(media="application/json")
 class BookingsWebService(object):
+    def OPTIONS(self):
+        cherrypy.response.status = 200
+        return
+    
     def POST(self):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
@@ -28,8 +32,8 @@ class BookingsWebService(object):
                 "message": "Entity not set in session."
             }
         
-        diary_uid = cherrypy.session.get("diary_uid")
-        if (diary_uid == None):
+        if (not "diary_uid" in req
+            or req["diary_uid"] == None):
             cherrypy.response.status = 400
             return {
                 "status": "BAD_REQUEST",
@@ -60,14 +64,15 @@ class BookingsWebService(object):
         #   request
         data = {
             "model": {
-                "entity_uid": entity_uid,
-                "diary_uid": diary_uid,
-                "booking_type_uid": req["booking_type_uid"],
-                "booking_status_uid": 21,
+                "entity_uid": int(entity_uid),
+                "diary_uid": int(req["diary_uid"]),
+                "booking_type_uid": int(req["booking_type_uid"]),
+                "booking_status_uid": int(req["booking_status_uid"]),
                 "start_time": req["start_time"],
-                "duration": req["duration"],
-                "patient_uid": req["patient_uid"],
-                "reason": req["reason"]
+                "duration": int(req["duration"]),
+                "patient_uid": int(req["patient_uid"]),
+                "reason": req["reason"],
+                "cancelled": False
             }
         }
         headers = {
@@ -76,9 +81,18 @@ class BookingsWebService(object):
             }
         }
 
+        cherrypy.log(str(entity_uid))
+        cherrypy.log(req["diary_uid"])
+        cherrypy.log(req["booking_type_uid"])
+        cherrypy.log(req["booking_status_uid"])
+        cherrypy.log(req["start_time"])
+        cherrypy.log(str(req["duration"]))
+        cherrypy.log(req["patient_uid"])
+        cherrypy.log(req["reason"])
+
         bookingRequest = requests.post(
             cherrypy.request.app.config['goodx-api']['host'] + "/api/booking",
-            data = data,
+            json = data,
             headers = headers
         )
 
@@ -113,7 +127,7 @@ class BookingsWebService(object):
             }
         
         params = {
-            "fields": "[[\"AS\",[\"I\",\"patient_uid\",\"name\"],\"patient_name\"],[\"AS\",[\"I\",\"patient_uid\",\"surname\"],\"patient_surname\"],[\"AS\",[\"I\",\"patient_uid\",\"debtor_uid\",\"name\"],\"debtor_name\"],[\"AS\",[\"I\",\"patient_uid\",\"debtor_uid\",\"surname\"],\"debtor_surname\"],\"uid\",\"entity_uid\",\"diary_uid\",\"booking_type_uid\",\"booking_status_uid\",\"patient_uid\",\"start_time\",\"duration\",\"treating_doctor_uid\",\"reason\",\"invoice_nr\",\"cancelled\",\"uuid\"]"
+            "fields": "[[\"AS\",[\"I\",\"patient_uid\",\"name\"],\"patient_name\"],[\"AS\",[\"I\",\"booking_status_uid\",\"name\"],\"booking_status\"],[\"AS\",[\"I\",\"booking_type_uid\",\"name\"],\"booking_type\"],[\"AS\",[\"I\",\"patient_uid\",\"surname\"],\"patient_surname\"],[\"AS\",[\"I\",\"patient_uid\",\"debtor_uid\",\"name\"],\"debtor_name\"],[\"AS\",[\"I\",\"patient_uid\",\"debtor_uid\",\"surname\"],\"debtor_surname\"],\"uid\",\"entity_uid\",\"diary_uid\",\"booking_type_uid\",\"booking_status_uid\",\"patient_uid\",\"start_time\",\"duration\",\"treating_doctor_uid\",\"reason\",\"invoice_nr\",\"cancelled\",\"uuid\"]"
         }
         headers = {
             "Cookie": "session_id=%(token)s" % {

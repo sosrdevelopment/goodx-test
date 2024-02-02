@@ -77,4 +77,8 @@ class DiariesWebService(object):
                 "response": diaryRequest.json()
             }
         
+        entity_uid = diaryResponse["data"][0]["entity_uid"]
+        if (entity_uid != None and entity_uid != cherrypy.session.get("entity_uid")):
+            cherrypy.session["entity_uid"] = entity_uid
+            
         return diaryResponse

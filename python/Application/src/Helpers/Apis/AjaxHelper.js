@@ -19,6 +19,8 @@ function customFetch(url, method, headers, body, checks, parse, credentials = tr
 			if (error.response.status === 401) {
 				window.localStorage.removeItem('sessionUser')
 				window.location.href = '/'
+			} else {
+				throw error.response.data
 			}
 		})
 }

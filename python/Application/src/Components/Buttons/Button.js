@@ -1,4 +1,4 @@
-const Button = ({ children, className, noProp, onClick, padding, reference }) => {
+function Button({ children, className, noProp, onClick, padding, reference }) {
 	return (
 		<button
 			className={`cursor-pointer ${
