@@ -11,14 +11,21 @@ module.exports = {
 		).then((r) => {
 			return r.data
 		})
-	},//
+	},
+	//	diaries
 	indexDiaries: () => {
-		return customFetch(
-			'/api/diaries',
-			'get',
-			{ 'Content-Type': 'application/json' }
-		).then((r) => {
+		return customFetch('/api/diaries', 'get', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
 			return r.data
 		})
-	}
+	},
+	//	bookings
+	indexBookings: (diary_uid) => {
+		return customFetch('/api/bookings?diary_uid=' + diary_uid, 'get', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
+			return r.data
+		})
+	},
 }

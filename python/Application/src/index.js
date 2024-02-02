@@ -6,14 +6,15 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 //  --- Imports : Views
 import BookingsIndexView from './Views/Bookings/BookingsIndexView'
 import DiariesIndexView from './Views/Diaries/DiariesIndexView'
+import DiariesShowView from './Views/Diaries/DiariesShowView'
 import UsersLogInView from './Views/Users/UsersLogInView'
 //  --- Imports : Context
 import ProtectedRoute from './Context/Authentication/ProtectedRoute'
 //  --- Imports : Containers
 import Layout from './Containers/Layout/Layout'
 //  --- Imports : Libraries
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 //  --- Imports : Assets
 import './Assets/css/index.css'
 import './Assets/css/scrollbar.css'
@@ -46,6 +47,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<DiariesIndexView />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path='/diaries/:diary_uid'
+								element={
+									<ProtectedRoute>
+										<DiariesShowView />
 									</ProtectedRoute>
 								}
 							/>

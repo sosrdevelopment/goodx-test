@@ -58,7 +58,14 @@ function UsersLogInView() {
 			},
 			() => toast('Invalid username or password', { type: 'error' })
 		)
-	}, [username, password, usernameIsValid, passwordIsValid, isValidUsername, isValidPassword])
+	}, [
+		username,
+		password,
+		usernameIsValid,
+		passwordIsValid,
+		isValidUsername,
+		isValidPassword,
+	])
 
 	//	response
 	return (
@@ -81,9 +88,7 @@ function UsersLogInView() {
 						validation={isValidPassword}
 					/>
 				</div>
-				<Button
-					className='border hover:border-cyan-400 shadow-lg mt-2'
-					onClick={signIn}>
+				<Button className='border hover:border-cyan-400 shadow-lg mt-2' onClick={signIn}>
 					<p>Login</p>
 				</Button>
 			</Card>
