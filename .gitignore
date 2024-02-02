@@ -9,6 +9,7 @@ bin/
 obj/
 *.py[cod]
 *$py.class
+package-lock.json
 
 # C extensions
 *.so

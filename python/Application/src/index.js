@@ -1,7 +1,8 @@
 //  --- Imports : React and Routing
-import React from 'react'
+import React, { useMemo } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
 //  --- Imports : Views
 import BookingsIndexView from './Views/Bookings/BookingsIndexView'
 import DiariesIndexView from './Views/Diaries/DiariesIndexView'
@@ -20,31 +21,37 @@ import AuthProvider from './Context/Authentication/AuthProvider'
 
 //  --- Main Application
 function App() {
+	const queryClient = useMemo(() => {
+		return new QueryClient()
+	}, [])
+
 	return (
 		<BrowserRouter>
 			<AuthProvider>
-				<Layout>
-					<ToastContainer />
-					<Routes>
-						<Route index path='/' element={<UsersLogInView />} />
-						<Route
-							path='/bookings'
-							element={
-								<ProtectedRoute>
-									<BookingsIndexView />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path='/diaries'
-							element={
-								<ProtectedRoute>
-									<DiariesIndexView />
-								</ProtectedRoute>
-							}
-						/>
-					</Routes>
-				</Layout>
+				<QueryClientProvider client={queryClient}>
+					<Layout>
+						<ToastContainer />
+						<Routes>
+							<Route index path='/' element={<UsersLogInView />} />
+							<Route
+								path='/bookings'
+								element={
+									<ProtectedRoute>
+										<BookingsIndexView />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path='/diaries'
+								element={
+									<ProtectedRoute>
+										<DiariesIndexView />
+									</ProtectedRoute>
+								}
+							/>
+						</Routes>
+					</Layout>
+				</QueryClientProvider>
 			</AuthProvider>
 		</BrowserRouter>
 	)

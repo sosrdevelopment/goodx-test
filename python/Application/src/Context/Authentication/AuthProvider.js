@@ -5,6 +5,7 @@ import AuthContext from './AuthContext'
 const AuthProvider = ({ children }) => {
 	//  --- variables ---
 	let [user, setUser] = useState(null)
+	let [sessionCookie, setSessionCookie] = useState(null)
 	let [isAuthenticated, setIsAuthenticated] = useState(false)
 
 	//	setup

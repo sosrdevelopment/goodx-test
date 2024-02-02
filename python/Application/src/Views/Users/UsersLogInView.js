@@ -44,9 +44,9 @@ function UsersLogInView() {
 	)
 
 	const signIn = useCallback(() => {
-		if (!usernameIsValid)
+		if (!isValidUsername(username))
 			return toast('Username is not valid', { type: 'error' })
-		if (!passwordIsValid)
+		if (!isValidPassword(password))
 			return toast('Password is not valid', { type: 'error' })
 
 		auth.signIn(
@@ -58,7 +58,7 @@ function UsersLogInView() {
 			},
 			() => toast('Invalid username or password', { type: 'error' })
 		)
-	}, [username, password, usernameIsValid, passwordIsValid])
+	}, [username, password, usernameIsValid, passwordIsValid, isValidUsername, isValidPassword])
 
 	//	response
 	return (

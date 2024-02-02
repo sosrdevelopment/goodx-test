@@ -4,12 +4,6 @@ import requests
 @cherrypy.expose
 class SessionsWebService(object):
     def OPTIONS(self):
-        cherrypy.response.headers["Access-Control-Allow-Origin"] = "*"
-        cherrypy.response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        cherrypy.response.headers["Access-Control-Allow-Headers"] = "Content-Type, Access-Control-Allow-Headers, Authorization"
-        cherrypy.response.headers["Access-Control-Max-Age"] = "86400"
-        cherrypy.response.headers["Access-Control-Allow-Credentials"] = "true"
-
         cherrypy.response.status = 200
         return
     
