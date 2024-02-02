@@ -22,9 +22,14 @@ module.exports = {
 	},
 	//	bookings
 	createBooking: (booking) => {
-		return customFetch('/api/bookings', 'post', {
-			'Content-Type': 'application/json',
-		}, booking).then((r) => {
+		return customFetch(
+			'/api/bookings',
+			'post',
+			{
+				'Content-Type': 'application/json',
+			},
+			booking
+		).then((r) => {
 			return r.data
 		})
 	},

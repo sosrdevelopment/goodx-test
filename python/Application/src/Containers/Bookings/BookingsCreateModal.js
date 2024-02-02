@@ -42,32 +42,32 @@ function BookingsCreateModal({ isVisible, setIsVisible, diary_uid, reload }) {
 		if (booking.patient_uid === '') return toast('Please select a patient')
 		if (booking.booking_type_uid === '') return toast('Please select a booking type')
 		if (booking.booking_status_uid === '') return toast('Please select a booking status')
-        if (booking.start_time === '') return toast('Please select a start time')
-        if (booking.duration === '') return toast('Please select a duration')
-        
+		if (booking.start_time === '') return toast('Please select a start time')
+		if (booking.duration === '') return toast('Please select a duration')
+
 		ApiHelper.createBooking(booking)
-            .then(() => {
+			.then(() => {
 				if (reload) reload()
-                setIsVisible(false)
-                toast('Diary created!', { type: 'success' })
-                resetBooking()
-            }).catch((error) => {
-                if (error.message)
-                    toast(error.message, { type: 'error' })
-            })
+				setIsVisible(false)
+				toast('Diary created!', { type: 'success' })
+				resetBooking()
+			})
+			.catch((error) => {
+				if (error.message) toast(error.message, { type: 'error' })
+			})
 	}, [booking, setIsVisible, diary_uid, reload])
 
-    const resetBooking = useCallback(() => {
-        setBooking({
-            diary_uid: diary_uid,
-            patient_uid: '',
-            booking_type_uid: '',
-            booking_status_uid: '',
-            start_time: new Date().toISOString().split('.')[0].split(':')[0] + ':00:00',
-            duration: 15,
-            reason: '',
-        })
-    }, [setBooking])
+	const resetBooking = useCallback(() => {
+		setBooking({
+			diary_uid: diary_uid,
+			patient_uid: '',
+			booking_type_uid: '',
+			booking_status_uid: '',
+			start_time: new Date().toISOString().split('.')[0].split(':')[0] + ':00:00',
+			duration: 15,
+			reason: '',
+		})
+	}, [setBooking])
 
 	//  Response
 	if (!isVisible) return null
