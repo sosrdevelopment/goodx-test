@@ -116,7 +116,7 @@ class BookingsWebService(object):
         
         return bookingResponse
     
-    def GET(self, bookingId = None, diary_uid = None):
+    def GET(self, booking_uid = None, diary_uid = None):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
             cherrypy.response.status = 401
@@ -135,8 +135,8 @@ class BookingsWebService(object):
             }
         }
 
-        if (bookingId != None):
-            params["filter"] = "[\"AND\",[\"=\",[\"I\",\"uid\"],[\"L\"," + bookingId + "]]]"
+        if (booking_uid != None):
+            params["filter"] = "[\"AND\",[\"=\",[\"I\",\"uid\"],[\"L\"," + booking_uid + "]]]"
         if (diary_uid != None):
             params["filter"] = "[\"AND\",[\"=\",[\"I\",\"diary_uid\"],[\"L\"," + diary_uid + "]]]"
 

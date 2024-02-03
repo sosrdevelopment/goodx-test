@@ -24,21 +24,8 @@ function BookingsCreateModal({ isVisible, setIsVisible, diary_uid, reload }) {
 		[diary_uid]
 	)
 
-	//  Functionality
-	const initializeModal = useCallback(() => {
-		setInitialized(true)
-		ApiHelper.indexBookingTypes().then((response) =>
-			setBookingTypes(response.data.sort((a, b) => a.name.localeCompare(b.name)))
-		)
-		ApiHelper.indexBookingStatuses().then((response) =>
-			setBookingStatuses(response.data.sort((a, b) => a.name.localeCompare(b.name)))
-		)
-		ApiHelper.indexPatients().then((response) =>
-			setPatients(response.data.sort((a, b) => a.name.localeCompare(b.name)))
-		)
-	}, [setInitialized, setBookingTypes, setBookingStatuses, setPatients])
-
-	const createNewBooking = useCallback(() => {
+	//  Functionality : Booking
+	const createBooking = useCallback(() => {
 		if (booking.patient_uid === '') return toast('Please select a patient')
 		if (booking.booking_type_uid === '') return toast('Please select a booking type')
 		if (booking.booking_status_uid === '') return toast('Please select a booking status')
@@ -69,15 +56,34 @@ function BookingsCreateModal({ isVisible, setIsVisible, diary_uid, reload }) {
 		})
 	}, [setBooking])
 
+	//  Functionality : Modal
+	const initializeModal = useCallback(() => {
+		setInitialized(true)
+		ApiHelper.indexBookingTypes().then((response) =>
+			setBookingTypes(response.data.sort((a, b) => a.name.localeCompare(b.name)))
+		)
+		ApiHelper.indexBookingStatuses().then((response) =>
+			setBookingStatuses(response.data.sort((a, b) => a.name.localeCompare(b.name)))
+		)
+		ApiHelper.indexPatients().then((response) =>
+			setPatients(response.data.sort((a, b) => a.name.localeCompare(b.name)))
+		)
+	}, [setInitialized, setBookingTypes, setBookingStatuses, setPatients])
+
+	const closeModal = useCallback(() => {
+		resetBooking()
+		if (isVisible) setIsVisible(false)
+	}, [resetBooking, isVisible, setIsVisible])
+
 	//  Response
 	if (!isVisible) return null
 	if (!initialized) initializeModal()
 
 	return (
-		<Modal isVisible={isVisible} setIsVisible={setIsVisible}>
+		<Modal isVisible={isVisible} setIsVisible={setIsVisible} closeCallback={resetBooking}>
 			<ModalCard outerClass='m-auto border' innerClass='flex flex-col'>
 				<div
-					className='w-[300px]'
+					className='w-[400px]'
 					onClick={(e) => {
 						e.preventDefault()
 						e.stopPropagation()
@@ -183,13 +189,13 @@ function BookingsCreateModal({ isVisible, setIsVisible, diary_uid, reload }) {
 					)}
 					<div className='border-t border-slate-300 px-5 py-2 flex justify-end'>
 						<button
-							onClick={createNewBooking}
+							onClick={createBooking}
 							className='bg-cyan-500 hover:bg-cyan-600 text-white p-2 rounded-md mr-2'
 						>
 							Create
 						</button>
 						<button
-							onClick={() => setIsVisible(false)}
+							onClick={closeModal}
 							className='bg-slate-300 hover:bg-slate-400 text-white p-2 rounded-md'
 						>
 							Cancel

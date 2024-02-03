@@ -1,4 +1,4 @@
-const Modal = ({ children, isVisible, setIsVisible }) => {
+const Modal = ({ children, isVisible, setIsVisible, closeCallback }) => {
 	//	--- response ---
 	if (!isVisible) return null
 	return (
@@ -8,7 +8,10 @@ const Modal = ({ children, isVisible, setIsVisible }) => {
 				e.preventDefault()
 				e.stopPropagation()
 
-				if (setIsVisible) setIsVisible(false)
+				if (setIsVisible) {
+					setIsVisible(false)
+					if (closeCallback) closeCallback(e)
+				}
 			}}
 		>
 			<div className='w-full h-full flex z-50'>{children}</div>

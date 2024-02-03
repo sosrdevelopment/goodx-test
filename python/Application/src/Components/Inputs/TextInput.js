@@ -1,6 +1,13 @@
 import { useCallback, useState } from 'react'
 
-const TextInput = ({ className, onChange, placeholder, validation, value }) => {
+const TextInput = ({
+	className,
+	onChange,
+	placeholder,
+	validation,
+	value,
+	disabled = false,
+}) => {
 	//	variables
 	let [borderColor, setBorderColor] = useState('')
 
@@ -30,6 +37,7 @@ const TextInput = ({ className, onChange, placeholder, validation, value }) => {
 			onChange={(e) => (onChange ? onChange(e) : null)}
 			placeholder={placeholder ? placeholder : ''}
 			type='text'
+			disabled={disabled}
 			value={value || ''}
 		/>
 	)

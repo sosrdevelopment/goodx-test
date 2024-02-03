@@ -40,6 +40,13 @@ module.exports = {
 			return r.data
 		})
 	},
+	showBooking: (booking_uid) => {
+		return customFetch('/api/bookings?booking_uid=' + booking_uid, 'get', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
+			return r.data
+		})
+	},
 	//	booking-types
 	indexBookingTypes: () => {
 		return customFetch('/api/bookingTypes', 'get', {
