@@ -74,7 +74,7 @@ function DiariesShowView() {
 						.sort((a, b) => a.start_date_time - b.start_date_time)
 						.map((booking) => {
 							var urgency = 'hover:border-teal-300'
-							if (booking.booking_status == 'Done') {
+							if (booking.booking_status === 'Done') {
 								urgency = 'shadow-green-300 hover:border-green-400'
 							} else if (booking.start_date_time < currentDate) {
 								urgency = 'shadow-rose-300 hover:border-rose-400'

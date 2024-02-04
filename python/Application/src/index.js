@@ -10,15 +10,16 @@ import DiariesShowView from './Views/Diaries/DiariesShowView'
 import UsersLogInView from './Views/Users/UsersLogInView'
 //  --- Imports : Context
 import ProtectedRoute from './Context/Authentication/ProtectedRoute'
+import AuthProvider from './Context/Authentication/AuthProvider'
 //  --- Imports : Containers
 import Layout from './Containers/Layout/Layout'
 //  --- Imports : Libraries
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 //  --- Imports : Assets
+import 'react-confirm-alert/src/react-confirm-alert.css'
 import './Assets/css/index.css'
 import './Assets/css/scrollbar.css'
-import AuthProvider from './Context/Authentication/AuthProvider'
 
 //  --- Main Application
 function App() {

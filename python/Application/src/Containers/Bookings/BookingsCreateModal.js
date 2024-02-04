@@ -25,6 +25,18 @@ function BookingsCreateModal({ isVisible, setIsVisible, diary_uid, reload }) {
 	)
 
 	//  Functionality : Booking
+	const resetBooking = useCallback(() => {
+		setBooking({
+			diary_uid: diary_uid,
+			patient_uid: '',
+			booking_type_uid: '',
+			booking_status_uid: '',
+			start_time: new Date().toISOString().split('.')[0].split(':')[0] + ':00:00',
+			duration: 15,
+			reason: '',
+		})
+	}, [setBooking, diary_uid])
+
 	const createBooking = useCallback(() => {
 		if (booking.patient_uid === '') return toast('Please select a patient')
 		if (booking.booking_type_uid === '') return toast('Please select a booking type')
@@ -42,19 +54,7 @@ function BookingsCreateModal({ isVisible, setIsVisible, diary_uid, reload }) {
 			.catch((error) => {
 				if (error.message) toast(error.message, { type: 'error' })
 			})
-	}, [booking, setIsVisible, diary_uid, reload])
-
-	const resetBooking = useCallback(() => {
-		setBooking({
-			diary_uid: diary_uid,
-			patient_uid: '',
-			booking_type_uid: '',
-			booking_status_uid: '',
-			start_time: new Date().toISOString().split('.')[0].split(':')[0] + ':00:00',
-			duration: 15,
-			reason: '',
-		})
-	}, [setBooking])
+	}, [booking, setIsVisible, reload, resetBooking])
 
 	//  Functionality : Modal
 	const initializeModal = useCallback(() => {

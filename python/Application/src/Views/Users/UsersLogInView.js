@@ -13,35 +13,15 @@ function UsersLogInView() {
 	const navigate = useNavigate()
 	let [username, setUsername] = useState()
 	let [password, setPassword] = useState()
-	let [usernameIsValid, setUsernameIsValid] = useState(false)
-	let [passwordIsValid, setPasswordIsValid] = useState(false)
 
 	//	functionality
-	const isValidUsername = useCallback(
-		(e) => {
-			if (e.length < 3) {
-				setUsernameIsValid(false)
-				return false
-			} else {
-				setUsernameIsValid(true)
-				return true
-			}
-		},
-		[setUsernameIsValid]
-	)
+	const isValidUsername = useCallback((e) => {
+		return e.length > 5
+	}, [])
 
-	const isValidPassword = useCallback(
-		(e) => {
-			if (e.length < 6) {
-				setPasswordIsValid(false)
-				return false
-			} else {
-				setPasswordIsValid(true)
-				return true
-			}
-		},
-		[setPasswordIsValid]
-	)
+	const isValidPassword = useCallback((e) => {
+		return e.length > 5
+	}, [])
 
 	const signIn = useCallback(() => {
 		if (!isValidUsername(username))
@@ -58,14 +38,7 @@ function UsersLogInView() {
 			},
 			() => toast('Invalid username or password', { type: 'error' })
 		)
-	}, [
-		username,
-		password,
-		usernameIsValid,
-		passwordIsValid,
-		isValidUsername,
-		isValidPassword,
-	])
+	}, [username, password, isValidUsername, isValidPassword, auth, navigate])
 
 	//	response
 	return (

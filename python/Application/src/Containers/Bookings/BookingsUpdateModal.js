@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { confirmAlert } from 'react-confirm-alert'
 import Modal from '../../Components/Modals/Modal'
 import ModalCard from '../../Components/Cards/ModalCard'
 import ApiHelper from '../../Helpers/Apis/ApiHelper'
@@ -17,7 +18,7 @@ function BookingsUpdateModal({ booking_uid, isVisible, setIsVisible, reload }) {
 		if (booking_uid && booking_uid !== null && booking_uid !== undefined)
 			ApiHelper.showBooking(booking_uid)
 				.then((response) => {
-					if (response.data.length == 0) throw new Error('Booking not found')
+					if (response.data.length === 0) throw new Error('Booking not found')
 
 					setBooking(response.data[0])
 					console.log(response.data[0])
@@ -31,16 +32,62 @@ function BookingsUpdateModal({ booking_uid, isVisible, setIsVisible, reload }) {
 			ApiHelper.indexBookingStatuses().then((response) =>
 				setBookingStatuses(response.data.sort((a, b) => a.name.localeCompare(b.name)))
 			)
-	}, [setBooking, setBookingStatuses, booking_uid])
+	}, [setBooking, bookingStatuses, setBookingStatuses, booking_uid])
 
 	//  Functionality : Booking
 	const updateBooking = useCallback(() => {
-		alert('ToDo : Update Booking')
-	}, [])
+		confirmAlert({
+			title: 'Update Booking',
+			message: 'Are you sure you want to update this booking?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => {
+						ApiHelper.updateBooking(booking)
+							.then(() => {
+								if (reload) reload()
+								setIsVisible(false)
+								toast('Booking updated!', { type: 'success' })
+							})
+							.catch((error) => {
+								if (error.message) toast(error.message, { type: 'error' })
+							})
+					},
+				},
+				{
+					label: 'No',
+					onClick: () => {},
+				},
+			],
+		})
+	}, [setIsVisible, booking, reload])
 
 	const deleteBooking = useCallback(() => {
-		alert('ToDo : Delete Booking')
-	}, [])
+		confirmAlert({
+			title: 'Delete Booking',
+			message: 'Are you sure you want to delete this booking?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => {
+						ApiHelper.deleteBooking(booking.uid)
+							.then(() => {
+								if (reload) reload()
+								setIsVisible(false)
+								toast('Booking deleted!', { type: 'success' })
+							})
+							.catch((error) => {
+								if (error.message) toast(error.message, { type: 'error' })
+							})
+					},
+				},
+				{
+					label: 'No',
+					onClick: () => {},
+				},
+			],
+		})
+	}, [setIsVisible, booking, reload])
 
 	const closeModal = useCallback(() => {
 		setBooking(null)
