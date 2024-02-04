@@ -6,7 +6,7 @@ import requests
 @cherrypy.tools.json_out()
 @cherrypy.tools.accept(media="application/json")
 class BookingsWebService(object):
-    def OPTIONS(self):
+    def OPTIONS(self, booking_uid = None):
         cherrypy.response.status = 200
         return
     
@@ -166,7 +166,7 @@ class BookingsWebService(object):
         
         return bookingResponse
     
-    def PUT(self, bookingId):
+    def PUT(self, booking_uid):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
             cherrypy.response.status = 401
@@ -179,10 +179,10 @@ class BookingsWebService(object):
         #   validation
 
         #   request
+        req = cherrypy.request.json
         data = {
             "model": {
-                "booking_uid": bookingId,
-                "booking_type_uid": req["booking_type_uid"],
+                "uid": booking_uid,
                 "booking_status_uid": req["booking_status_uid"],
                 "start_time": req["start_time"],
                 "duration": req["duration"],
@@ -196,8 +196,8 @@ class BookingsWebService(object):
         }
 
         bookingRequest = requests.put(
-            cherrypy.request.app.config['goodx-api']['host'] + "/api/booking/" + bookingId,
-            data = data,
+            cherrypy.request.app.config['goodx-api']['host'] + "/api/booking/" + booking_uid,
+            json = data,
             headers = headers
         )
 
@@ -221,7 +221,7 @@ class BookingsWebService(object):
         
         return bookingResponse
     
-    def DELETE(self, bookingId = None):
+    def DELETE(self, booking_uid = None):
         #   guard : authentication
         if (not cherrypy.session.get("token")):
             cherrypy.response.status = 401
@@ -234,7 +234,7 @@ class BookingsWebService(object):
         #   request
         data = {
             "model": {
-                "booking_uid": bookingId,
+                "uid": booking_uid,
                 "cancelled": True
             }
         }
@@ -245,8 +245,8 @@ class BookingsWebService(object):
         }
 
         bookingRequest = requests.put(
-            cherrypy.request.app.config['goodx-api']['host'] + "/api/booking/" + bookingId,
-            data = data,
+            cherrypy.request.app.config['goodx-api']['host'] + "/api/booking/" + booking_uid,
+            json = data,
             headers = headers
         )
 

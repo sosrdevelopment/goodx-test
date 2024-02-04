@@ -4,10 +4,11 @@
 - IDK but NB
   - entity_uid on POST /api/bookings
 - UI
-  - [In Progress] --  Swal confirms
-  - [In Progress] --  Update / Delete bookings
-  - Loading Modal on login
-  - Add tabs to diary bookings
+  - [Done]  --  Swal confirms
+  - [Done]  --  Update / Delete bookings
+  - [Done]  --  Loading Modal on login
+  - [Done]  --  Add tabs to diary bookings
+  - Fix session cookies going bonkers on reload
 - Backend
   - Better API Exception Handling
   - Cleaner API Responses

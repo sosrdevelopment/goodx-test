@@ -47,6 +47,25 @@ module.exports = {
 			return r.data
 		})
 	},
+	updateBooking: (booking_uid, booking) => {
+		return customFetch(
+			'/api/bookings/' + booking_uid,
+			'put',
+			{
+				'Content-Type': 'application/json',
+			},
+			booking
+		).then((r) => {
+			return r.data
+		})
+	},
+	deleteBooking: (booking_uid) => {
+		return customFetch('/api/bookings/' + booking_uid, 'delete', {
+			'Content-Type': 'application/json',
+		}).then((r) => {
+			return r.data
+		})
+	},
 	//	booking-types
 	indexBookingTypes: () => {
 		return customFetch('/api/bookingTypes', 'get', {

@@ -19,12 +19,6 @@ function Header() {
 							>
 								Diaries
 							</p>
-							<p
-								className='cursor-pointer hover:underline'
-								onClick={() => navigate('/bookings')}
-							>
-								Bookings
-							</p>
 						</div>
 					) : null}
 				</div>

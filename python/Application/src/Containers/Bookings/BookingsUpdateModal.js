@@ -21,10 +21,8 @@ function BookingsUpdateModal({ booking_uid, isVisible, setIsVisible, reload }) {
 					if (response.data.length === 0) throw new Error('Booking not found')
 
 					setBooking(response.data[0])
-					console.log(response.data[0])
 				})
 				.catch((error) => {
-					console.error(error)
 					toast(error.message, { type: 'error' })
 				})
 
@@ -43,7 +41,7 @@ function BookingsUpdateModal({ booking_uid, isVisible, setIsVisible, reload }) {
 				{
 					label: 'Yes',
 					onClick: () => {
-						ApiHelper.updateBooking(booking)
+						ApiHelper.updateBooking(booking.uid, booking)
 							.then(() => {
 								if (reload) reload()
 								setIsVisible(false)

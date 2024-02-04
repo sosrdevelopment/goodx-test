@@ -1,12 +1,13 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import ApiHelper from '../../Helpers/Apis/ApiHelper'
 import Button from '../../Components/Buttons/Button'
 import ResponsiveLoadingCard from '../../Components/Cards/ResponsiveLoadingCard'
-import Card from '../../Components/Cards/Card'
 import BookingsCreateModal from '../../Containers/Bookings/BookingsCreateModal'
 import BookingsUpdateModal from '../../Containers/Bookings/BookingsUpdateModal'
+import DiaryBookingsTab from '../../Containers/Diaries/DiaryBookingsTab'
+import Card from '../../Components/Cards/Card'
 
 function DiariesShowView() {
 	//  Variables
@@ -17,6 +18,22 @@ function DiariesShowView() {
 	const [createIsVisible, setCreateIsVisible] = useState(false)
 	const [updateIsVisible, setUpdateIsVisible] = useState(false)
 	const [updateBookingUid, setUpdateBookingUid] = useState(false)
+	const [bookings, setBookings] = useState({
+		Booked: [],
+		Arrived: [],
+		Done: [],
+		Ready: [],
+		Cancelled: [],
+		Treated: [],
+	})
+	const [bookingTabsVisibility, setBookingTabsVisibility] = useState([
+		true,
+		false,
+		false,
+		false,
+		false,
+		false,
+	])
 
 	//  Queries
 	const { data, isLoading, error, refetch } = useQuery(
@@ -24,12 +41,25 @@ function DiariesShowView() {
 		() => ApiHelper.indexBookings(diary_uid),
 		{
 			refetchOnWindowFocus: false,
-			refetchInterval: 60000,
+			refetchInterval: 300000,
 			retryDelay: 2000,
 		}
 	)
 
 	//  Functionality
+	useEffect(() => {
+		if (error || isLoading) return
+
+		setBookings({
+			Booked: data.data.filter((booking) => booking.booking_status === 'Booked'),
+			Arrived: data.data.filter((booking) => booking.booking_status === 'Arrived'),
+			Done: data.data.filter((booking) => booking.booking_status === 'Done'),
+			Ready: data.data.filter((booking) => booking.booking_status === 'Ready'),
+			Cancelled: data.data.filter((booking) => booking.booking_status === 'Cancelled'),
+			Treated: data.data.filter((booking) => booking.booking_status === 'Treated'),
+		})
+	}, [data, isLoading, error, setBookings])
+
 	const updateBooking = useCallback(
 		(booking_uid) => {
 			setUpdateBookingUid(booking_uid)
@@ -62,99 +92,86 @@ function DiariesShowView() {
 						+ Create Booking
 					</Button>
 				</div>
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 w-full gap-4 mb-auto'>
-					{data.data
-						.map((booking) => {
-							return {
-								...booking,
-								start_date_time:
-									booking.start_time == null ? null : new Date(booking.start_time),
+				<div>
+					<div className='flex space-x-3'>
+						<button
+							className={`hover:border-cyan-300  px-3 py-1.5 rounded-t-lg ${
+								bookingTabsVisibility[0] ? 'bg-white border-b-0' : 'border'
+							}`}
+							onClick={() =>
+								setBookingTabsVisibility([true, false, false, false, false, false])
 							}
-						})
-						.sort((a, b) => a.start_date_time - b.start_date_time)
-						.map((booking) => {
-							var urgency = 'hover:border-teal-300'
-							if (booking.booking_status === 'Done') {
-								urgency = 'shadow-green-300 hover:border-green-400'
-							} else if (booking.start_date_time < currentDate) {
-								urgency = 'shadow-rose-300 hover:border-rose-400'
-							} else if (booking.start_date_time < nextWeek) {
-								urgency = 'shadow-amber-300 hover:border-amber-400'
+						>
+							Booked
+						</button>
+						<button
+							className={`hover:border-cyan-300  px-3 py-1.5 rounded-t-lg ${
+								bookingTabsVisibility[1] ? 'bg-white border-b-0' : 'border'
+							}`}
+							onClick={() =>
+								setBookingTabsVisibility([false, true, false, false, false, false])
 							}
-							return (
-								<div key={booking.uid} onClick={() => updateBooking(booking.uid)}>
-									<Card
-										outerClass={`mb-auto cursor-pointer rounded-lg border h-full `}
-										shadow={`shadow-lg ${urgency}`}
-										innerClass='space-y-1'
-									>
-										<p className='text-lg font-bold text-center pb-1'>
-											{booking.invoice_nr}
-										</p>
-										<div className='flex space-x-3'>
-											<label className='text-sm'>Start Time:</label>
-											{booking.start_time ? (
-												<p className='text-sm'>
-													{new Date(booking.start_time).toLocaleString()}
-												</p>
-											) : (
-												<p className='text-sm'>---</p>
-											)}
-										</div>
-										<div className='flex space-x-3'>
-											<label className='text-sm'>Doctor:</label>
-											{booking.treating_doctor_uid ? (
-												<p className='text-sm'>{booking.treating_doctor_uid}</p>
-											) : (
-												<p className='text-sm'>---</p>
-											)}
-										</div>
-										<div className='border-t border-slate-300'></div>
-										<div className='flex space-x-3'>
-											<label className='text-sm'>Type:</label>
-											{booking.booking_type ? (
-												<p className='text-sm'>{booking.booking_type}</p>
-											) : (
-												<p className='text-sm'>---</p>
-											)}
-										</div>
-										<div className='flex space-x-3'>
-											<label className='text-sm'>Status:</label>
-											{booking.booking_status ? (
-												<p className='text-sm'>{booking.booking_status}</p>
-											) : (
-												<p className='text-sm'>---</p>
-											)}
-										</div>
-										<div className='flex space-x-3'>
-											<label className='text-sm'>Reason:</label>
-											{booking.reason ? (
-												<p className='text-sm'>{booking.reason}</p>
-											) : (
-												<p className='text-sm'>---</p>
-											)}
-										</div>
-										<div className='border-t border-slate-300'></div>
-										{booking.debtor_name ? (
-											<div className='flex space-x-3'>
-												<label className='text-sm'>Debtor:</label>
-												<p className='text-sm'>
-													{booking.debtor_name} {booking.debtor_surname}
-												</p>
-											</div>
-										) : null}
-										{booking.patient_name ? (
-											<div className='flex space-x-3'>
-												<label className='text-sm'>Patient:</label>
-												<p className='text-sm'>
-													{booking.patient_name} {booking.patient_surname}
-												</p>
-											</div>
-										) : null}
-									</Card>
-								</div>
-							)
-						})}
+						>
+							Arrived
+						</button>
+						<button
+							className={`hover:border-cyan-300  px-3 py-1.5 rounded-t-lg ${
+								bookingTabsVisibility[3] ? 'bg-white border-b-0' : 'border'
+							}`}
+							onClick={() =>
+								setBookingTabsVisibility([false, false, false, true, false, false])
+							}
+						>
+							Ready
+						</button>
+						<button
+							className={`hover:border-cyan-300  px-3 py-1.5 rounded-t-lg ${
+								bookingTabsVisibility[2] ? 'bg-white border-b-0' : 'border'
+							}`}
+							onClick={() =>
+								setBookingTabsVisibility([false, false, true, false, false, false])
+							}
+						>
+							Done
+						</button>
+						<button
+							className={`hover:border-cyan-300  px-3 py-1.5 rounded-t-lg ${
+								bookingTabsVisibility[5] ? 'bg-white border-b-0' : 'border'
+							}`}
+							onClick={() =>
+								setBookingTabsVisibility([false, false, false, false, false, true])
+							}
+						>
+							Treated
+						</button>
+					</div>
+					<div className='bg-white rounded-b-lg rounded-r-lg p-5'>
+						<DiaryBookingsTab
+							isVisible={bookingTabsVisibility[0]}
+							bookings={bookings.Booked}
+							updateBooking={updateBooking}
+						/>
+						<DiaryBookingsTab
+							isVisible={bookingTabsVisibility[1]}
+							bookings={bookings.Arrived}
+							updateBooking={updateBooking}
+						/>
+						<DiaryBookingsTab
+							isVisible={bookingTabsVisibility[2]}
+							bookings={bookings.Done}
+							updateBooking={updateBooking}
+						/>
+						<DiaryBookingsTab
+							isVisible={bookingTabsVisibility[3]}
+							bookings={bookings.Ready}
+							updateBooking={updateBooking}
+						/>
+						<DiaryBookingsTab
+							isVisible={bookingTabsVisibility[5]}
+							bookings={bookings.Treated}
+							updateBooking={updateBooking}
+						/>
+					</div>
 				</div>
 			</div>
 			<BookingsCreateModal
