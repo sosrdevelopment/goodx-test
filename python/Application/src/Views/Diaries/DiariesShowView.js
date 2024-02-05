@@ -7,13 +7,9 @@ import ResponsiveLoadingCard from '../../Components/Cards/ResponsiveLoadingCard'
 import BookingsCreateModal from '../../Containers/Bookings/BookingsCreateModal'
 import BookingsUpdateModal from '../../Containers/Bookings/BookingsUpdateModal'
 import DiaryBookingsTab from '../../Containers/Diaries/DiaryBookingsTab'
-import Card from '../../Components/Cards/Card'
 
 function DiariesShowView() {
 	//  Variables
-	const currentDate = new Date()
-	const nextWeek = new Date().setDate(currentDate.getDate() + 7)
-
 	const { diary_uid } = useParams()
 	const [createIsVisible, setCreateIsVisible] = useState(false)
 	const [updateIsVisible, setUpdateIsVisible] = useState(false)
@@ -145,7 +141,7 @@ function DiariesShowView() {
 							Treated
 						</button>
 					</div>
-					<div className='bg-white rounded-b-lg rounded-r-lg p-5'>
+					<div className='bg-white rounded-b-lg rounded-r-lg p-5 shadow-xl shadow-t-xl'>
 						<DiaryBookingsTab
 							isVisible={bookingTabsVisibility[0]}
 							bookings={bookings.Booked}

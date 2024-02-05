@@ -4,7 +4,17 @@ import requests
 @cherrypy.expose
 @cherrypy.tools.authenticate()
 class BookingStatusesWebServices(object):
-    def GET(self, bookingStatusId = None):        
+    def GET(self, bookingStatusId = None):   
+        #   guard : authentication
+        if (not cherrypy.session.get("token")):
+            cherrypy.response.status = 401
+            return {
+                "status": "UNAUTHORIZED",
+                "status_code": 401,
+                "message": "Not authenticated."
+            }
+
+        #   Requests     
         params = {
             "fields": "[\"uid\",\"entity_uid\",\"diary_uid\",\"name\",\"next_booking_status_uid\",\"is_arrived\",\"is_final\",\"disabled\"]"
         }

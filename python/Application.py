@@ -1,5 +1,4 @@
 import cherrypy
-import os
 
 #  --- Middleware
 from Infrastructure.Authenticate import authenticate
@@ -42,7 +41,7 @@ if __name__ == '__main__':
 
     #  --- Setup : Server
     cherrypy.config.update({
-        'server.socket_host': '127.0.0.1',
+        'server.socket_host': '0.0.0.0',
         'server.socket_port': 8080
     })
 

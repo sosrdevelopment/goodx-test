@@ -81,15 +81,6 @@ class BookingsWebService(object):
             }
         }
 
-        cherrypy.log(str(entity_uid))
-        cherrypy.log(req["diary_uid"])
-        cherrypy.log(req["booking_type_uid"])
-        cherrypy.log(req["booking_status_uid"])
-        cherrypy.log(req["start_time"])
-        cherrypy.log(str(req["duration"]))
-        cherrypy.log(req["patient_uid"])
-        cherrypy.log(req["reason"])
-
         bookingRequest = requests.post(
             cherrypy.request.app.config['goodx-api']['host'] + "/api/booking",
             json = data,
