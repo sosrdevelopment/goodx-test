@@ -47,12 +47,12 @@ function DiariesShowView() {
 		if (error || isLoading) return
 
 		setBookings({
-			Booked: data.data.filter((booking) => booking.booking_status === 'Booked'),
-			Arrived: data.data.filter((booking) => booking.booking_status === 'Arrived'),
-			Done: data.data.filter((booking) => booking.booking_status === 'Done'),
-			Ready: data.data.filter((booking) => booking.booking_status === 'Ready'),
-			Cancelled: data.data.filter((booking) => booking.booking_status === 'Cancelled'),
-			Treated: data.data.filter((booking) => booking.booking_status === 'Treated'),
+			Booked: data.data.filter((booking) => booking.booking_status === 'Booked' && booking.cancelled === false),
+			Arrived: data.data.filter((booking) => booking.booking_status === 'Arrived' && booking.cancelled === false),
+			Done: data.data.filter((booking) => booking.booking_status === 'Done' && booking.cancelled === false),
+			Ready: data.data.filter((booking) => booking.booking_status === 'Ready' && booking.cancelled === false),
+			Cancelled: data.data.filter((booking) => booking.cancelled === true),
+			Treated: data.data.filter((booking) => booking.booking_status === 'Treated' && booking.cancelled === false),
 		})
 	}, [data, isLoading, error, setBookings])
 
@@ -140,6 +140,16 @@ function DiariesShowView() {
 						>
 							Treated
 						</button>
+						<button
+							className={`hover:border-cyan-300  px-3 py-1.5 rounded-t-lg ${
+								bookingTabsVisibility[4] ? 'bg-white border-b-0' : 'border'
+							}`}
+							onClick={() =>
+								setBookingTabsVisibility([false, false, false, false, true, false])
+							}
+						>
+							Cancelled
+						</button>
 					</div>
 					<div className='bg-white rounded-b-lg rounded-r-lg p-5 shadow-xl shadow-t-xl'>
 						<DiaryBookingsTab
@@ -166,6 +176,11 @@ function DiariesShowView() {
 							isVisible={bookingTabsVisibility[5]}
 							bookings={bookings.Treated}
 							updateBooking={updateBooking}
+						/>
+						<DiaryBookingsTab
+							isVisible={bookingTabsVisibility[4]}
+							bookings={bookings.Cancelled}
+							updateBooking={() => console.log('Cancelled')}
 						/>
 					</div>
 				</div>
